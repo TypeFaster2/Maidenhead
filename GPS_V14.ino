@@ -5,30 +5,30 @@
 *************************************************************/
 
 /*
-v3: Originaly based on sketch from the TinyGPS site.  27 Oct 2012
+v3: Originally based on sketch from the TinyGPS site. 27 Oct 2012
 v13: First full working version.                      11 Nov 2012
 v14: Cleaned up working version with comments.        18 Nov 2012
 
 Action list:
-Add tempreture reading using a one wire sensor.
+Add temperature reading using a one wire sensor.
 Add battery voltage monitor.
 Consider a switch to turn off backlight.
 */
 
    #define sprnt                      // Enable all the Serial Port code to be skipped
 //   #define floats                   // Enable inclusion on floating point code.
-                                      // Usually off. FP code is slow and ot needed
+                                      // Usually off. FP code is slow and not needed
 
 //   #define Demo                     // Enables dummy locn. Allows testing with no GPS
                                       // The dummy sites need to be updated in the Locn and
-                                      // Maidenhead rountines.
+                                      // Maidenhead routines.
 
 // Libraries
 #include <SoftwareSerial.h>           // Load the Serial library
 #include <LiquidCrystal.h>            // Load the standard library
 #include <TinyGPS.h>                  // Load the TinyGPS library
 
-/*  Software serial multple serial test
+/*  Software serial multiple serial test
  
  Receives from the hardware serial, sends to software serial.
  Receives from software serial, sends to hardware serial.
@@ -66,7 +66,7 @@ unsigned long CycleTimer = 0;
 float LAT, LON;
 #endif
 
-/*  +++ These two varaibles need to be manually set for the current time and location +++
+/*  +++ These two variables need to be manually set for the current time and location +++
    Local_Offset of 10 adds 10 hours to GMT, valid for Australian Eastern Standard time.
    DST of 1 adds an extra hour in summer.  */
 int DST          =  1;                // Daylight Savings Offset
@@ -86,10 +86,10 @@ Serial.println("Start");
   lcd.setCursor(0,0);                            // set the preamble text
   //                         *                       *               * 
   //         012345678901234567890123456789012345678901234567890123456789012345678901
-  lcd.print(" Amature Radio    Decoder by            GPS Grid Square  VK3FMAL    V1.0");  
+  lcd.print(" Amateur Radio    Decoder by            GPS Grid Square  VK3FMAL    V1.0");  
   #ifdef Demo
   lcd.setCursor(0,0);                            // set the preamble text
-  lcd.print(" Amature Radio    Decoder by            GPS Grid Square VK3FMAL DemoMode");  
+  lcd.print(" Amateur Radio    Decoder by            GPS Grid Square VK3FMAL DemoMode");  
   delay(5000);
   #endif
    
@@ -176,7 +176,7 @@ DiagNum("Lon is : ", lon);
 lon = lon + 18000000;                            // Step 1
 lat = lat +  9000000;                            // Adjust so Locn AA is at the pole
 
-char MH[6] = {'A', 'A', '0', '0', 'a', 'a'};     // Initilise our print string
+char MH[6] = {'A', 'A', '0', '0', 'a', 'a'};     // Initialise our print string
   MH[0] +=  lon / 2000000;                       // Field
   MH[1] +=  lat / 1000000;
   MH[2] += (lon % 2000000) / 200000;             // Square
@@ -190,7 +190,7 @@ while (i < 6){
   MH_txt += MH[i];
   i++; }
 
-#ifdef sprnt//12345678901 xxx 
+#ifdef sprnt
 Serial.print("Maidenhead : ");
 Serial.println(MH_txt);
 #endif
@@ -211,7 +211,7 @@ feedgps();
   if(time > 23595959) {                               // Check we have a valid input
   //        1919221760
   #ifdef sprnt 
-  DiagNum("Time to big. Time_Type is : ", Time_Type); // Too big, will give wierd results
+  DiagNum("Time to big. Time_Type is : ", Time_Type); // Too big, will give weird results
   Serial.print(time);  
   Serial.print("******* Time Error ************************************");
   #endif
@@ -268,7 +268,7 @@ void GPS_date(int Date_Type){
 feedgps();  
   gps.get_datetime(&date, &time, &fix_age);         // time in hh:mm:ss, date in dd/mm/yy
 
-  if(date > 311299) {                               // Too big, will give wierd results
+  if(date > 311299) {                               // Too big, will give weird results
   Serial.println("******* Date Error ************************************");
   return ;}
 
@@ -350,8 +350,8 @@ if (LLDec < 0){ H = H + 1;}                             // Step 1. Are we N,S,E 
 if (LLDec < 0)                                          // Ensure we're working with a positive number
        { LLDec = LLDec * -1;} 
                     
-long Deg = (LLDec / 100000);                            // get the Degeress
-long Min_i = (LLDec - (Deg * 100000)) * 60  ;           // Work out the remainder. Intermeadite step
+long Deg = (LLDec / 100000);                            // get the Degrees
+long Min_i = (LLDec - (Deg * 100000)) * 60  ;           // Work out the remainder. Intermediate step
 long Min = Min_i / 100000;                              // finalise minutes
 long Sec = ((Min_i - (Min * 100000)) /100);             // Seconds
 
@@ -360,7 +360,7 @@ feedgps();                                              // This is a slow routin
 
    DMS = "";                                            // Build up a string. Printing one string is                 
    DMS += HeadingLetter;                                // faster than multiple LCD writes.
-   if(Deg > 99){DMS += Deg;} else                       // Get spacing infront of Deg right
+   if(Deg > 99){DMS += Deg;} else                       // Get spacing in front of Deg right
    {if(Deg > 9){DMS += " "; DMS += Deg;}
    else {DMS += "   "; DMS += Deg;}}
    
@@ -383,7 +383,7 @@ feedgps();                                              // This is a slow routin
    
    } else {
 #ifdef sprnt     
-   DiagTxt("Longtitude  : ", DMS);  
+   DiagTxt("Longitude  : ", DMS);  
 #endif   
    lcd.setCursor(0, 1);}                                // get screen locn right  
     
@@ -463,7 +463,7 @@ DiagNum("Course     : ", course);
 // **********************************************************
 void GPS_FixAge(){
 // float flat, flon;   // returns +- latitude/longitude in degrees
- long lat, lon;        // Gets Lat and Lon without loading floatng point libraries
+ long lat, lon;        // Gets Lat and Lon without loading floating point libraries
 feedgps();
 unsigned long fix_age; 
 
@@ -533,14 +533,14 @@ feedgps();                                // If we don't feed the gps during thi
 
 
 // **********************************************************
-void DiagTxt(String label, String text){              // funtion to print to Serial Port
-    Serial.print  (label);                            // Print out the text info, usualy the variable
+void DiagTxt(String label, String text){              // function to print to Serial Port
+    Serial.print  (label);                            // Print out the text info, usually the variable
     Serial.println(text);                             // Print out the variable value
 } 
 
 // **********************************************************
-void DiagNum(String label, long num){                 // funtion to print to Serial Port
-    Serial.print  (label);                            // Print out the text info, usualy the variable
+void DiagNum(String label, long num){                 // function to print to Serial Port
+    Serial.print  (label);                            // Print out the text info, usually the variable
     Serial.println(num);                              // Print out the variable value
 } 
  
